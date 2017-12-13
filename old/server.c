@@ -41,7 +41,7 @@ int		main()
   socklen_t crecsize = sizeof(csin);
 
   int sock_err;
-  char message[32] = "";
+
 
   if(!erreur)
     {
@@ -78,17 +78,13 @@ int		main()
 		  csock = accept(sock, (SOCKADDR*)&csin, &crecsize);
 		  printf("Un client se connecte avec la socket %d de %s:%d\n", csock, inet_ntoa(csin.sin_addr), htons(csin.sin_port));
 		  
-		  // sock_err = send(csock, buffer, 32, 0);
-		  /*if(sock_err != SOCKET_ERROR)
+		  sock_err = send(csock, buffer, 32, 0);
+		  if(sock_err != SOCKET_ERROR)
 		    printf("Chaine envoyée : %s\n", buffer);
 		  else
 		    printf("Erreur de transmission\n");
 		  /* Il ne faut pas oublier de fermer la connexion (fermée dans les deux sens) */
-		  //shutdown(csock, 2);
-		  if(recv(csock, message, 32, 0) != SOCKET_ERROR)
-		    printf("Recu : %s\n", message);
-		  else
-		    printf("Aucun message reçu\n");
+		  shutdown(csock, 2);
 		}
 		
 	      else
@@ -102,7 +98,7 @@ int		main()
 	  printf("Fermeture de la socket serveur\n");
 	  closesocket(sock);
 	  printf("Fermeture du serveur terminée\n");
-	  printf("-----------------------------\n");
+
 	}
       else
 	perror("socket");

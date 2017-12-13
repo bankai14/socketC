@@ -17,26 +17,9 @@ typedef struct sockaddr SOCKADDR;
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "./lib/get_next_line.h"
-#include "./lib/write.h"
 #define PORT 4242
 
 
-int	my_putchar(char c)
-{
-  return (write(1, &c, 1) ? 0 : - 1);
-}
-
-void	my_putstr(char *str)
-{
-  int	i = 0;
-
-  while (str[i])
-    {
-      my_putchar(str[i]);
-      i++;
-    }
-}
 
 int main(void)
 {
@@ -50,13 +33,10 @@ int main(void)
   SOCKET sock;
   SOCKADDR_IN sin;
   char buffer[32] = "";
-  char	*message;
-  int sock_err;
   
+
   if(!erreur)
     {
-      my_putstr("$> ");
-      message = get_next_line(0);
       /* Création de la socket */
       sock = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -69,15 +49,9 @@ int main(void)
       if(connect(sock, (SOCKADDR*)&sin, sizeof(sin)) != SOCKET_ERROR)
 	{
 	  printf("Connexion à %s sur le port %d\n", inet_ntoa(sin.sin_addr), htons(sin.sin_port));
-	   /* Si l'on reçoit des informations : on les affiche à l'écran */
-	  /*if(recv(sock, buffer, 32, 0) != SOCKET_ERROR)
-	    printf("Recu : %s\n", buffer);*/
-	  sock_err = send(sock, message, 32, 0);
-	    if(sock_err != SOCKET_ERROR)
-	      printf("Chaine envoyée : %s\n", message); 
-	    else
-	      printf("Erreur de transmission\n");                              
-	    shutdown(sock, 2);
+	  /* Si l'on reçoit des informations : on les affiche à l'écran */
+	  if(recv(sock, buffer, 32, 0) != SOCKET_ERROR)
+	    printf("Recu : %s\n", buffer);
 	}
       else
 	printf("Impossible de se connecter\n");
@@ -90,6 +64,6 @@ int main(void)
               #endif
     }
   /* On attend que l'utilisateur tape sur une touche, puis on ferme */
-  
+  getchar();
   return EXIT_SUCCESS;
 }
